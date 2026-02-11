@@ -1,7 +1,6 @@
 modules/
 node_modules/
 prisma/
-utils/
 .env
 .env.example
 package.json
