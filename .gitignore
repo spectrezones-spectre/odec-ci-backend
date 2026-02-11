@@ -2,6 +2,4 @@ modules/
 node_modules/
 .env
 .env.example
-package.json
-package-lock.json
 save.md 
