@@ -1,0 +1,11 @@
+config/
+middlewares/
+modules/
+node_modules/
+prisma/
+utils/
+.env
+.env.example
+package.json
+package-lock.json
+save.md 
