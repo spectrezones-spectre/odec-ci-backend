@@ -19,9 +19,7 @@ const isProd = process.env.NODE_ENV === "production";
 app.use(morgan(isProd ? "combined" : "dev"));
 
 const normalizeOrigin = (origin) =>
-  String(origin || "")
-    .trim()
-    .replace(/\/+$/, "");
+  String(origin || "").trim().replace(/\/+$/, "");
 
 const envCorsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map(normalizeOrigin).filter(Boolean)
@@ -40,7 +38,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // Postman / curl
     const normalized = normalizeOrigin(origin);
     if (allowedOrigins.has(normalized)) return callback(null, true);
     return callback(new Error(`CORS: origine non autorisee (${normalized})`));
@@ -51,7 +49,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("/api/*", cors(corsOptions)); // preflight pour toutes les routes API
 
 app.use(
   helmet({
@@ -60,7 +58,7 @@ app.use(
     referrerPolicy: { policy: "no-referrer" },
     xContentTypeOptions: true,
     xDnsPrefetchControl: { allow: false },
-  }),
+  })
 );
 
 app.use(globalLimiter);
@@ -85,7 +83,7 @@ app.use(errorHandler);
   try {
     console.log("CORS origins autorisees:", Array.from(allowedOrigins));
     await verifyDbConnection();
-    console.log("Base de donnees connectee");
+    console.log("Base de donnees connectee ✅");
   } catch (error) {
     console.error("Erreur connexion DB :", error?.message || error);
   }
