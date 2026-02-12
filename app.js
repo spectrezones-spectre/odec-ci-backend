@@ -68,7 +68,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/articles", articleRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/ai", aiRoutes);
+// app.use("/api/ai", aiRoutes);
 app.use("/api/contact", contactRoutes);
 
 app.get("/", (_req, res) => {
