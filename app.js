@@ -49,7 +49,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("/api/*", cors(corsOptions)); // preflight pour toutes les routes API
+app.options(/.*/, cors(corsOptions)); // preflight pour toutes les routes API
 
 app.use(
   helmet({
