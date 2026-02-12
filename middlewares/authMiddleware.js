@@ -27,6 +27,11 @@ export const protect = (req, _res, next) => {
 
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
+    if (!req.user?.admin) {
+      return next(
+        createHttpError(403, "Acces admin requis", "ADMIN_ACCESS_REQUIRED"),
+      );
+    }
     return next();
   } catch (error) {
     return next(

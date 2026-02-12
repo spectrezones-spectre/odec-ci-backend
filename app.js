@@ -25,15 +25,14 @@ const envCorsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map(normalizeOrigin).filter(Boolean)
   : [];
 
-const fallbackCorsOrigins = [
-  "https://odec-ci.netlify.app",
-  "http://localhost:3000",
-  "http://localhost:5173",
-].map(normalizeOrigin);
+const fallbackCorsOrigins =
+  process.env.NODE_ENV === "production"
+    ? []
+    : ["http://localhost:3000", "http://localhost:5173"].map(normalizeOrigin);
 
 const allowedOrigins = new Set([...fallbackCorsOrigins, ...envCorsOrigins]);
 
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: false }));
 
 const corsOptions = {

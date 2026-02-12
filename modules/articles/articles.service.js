@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import sanitizeHtml from "sanitize-html";
 import { createHttpError } from "../../utils/httpError.js";
-
-const prisma = new PrismaClient();
+import { db } from "../../config/db.js";
 
 const toNumberId = (id) => {
   const articleId = Number(id);
@@ -17,11 +16,48 @@ const toNumberId = (id) => {
 };
 
 const normalizePayload = (data = {}) => {
+  const safeTitle = sanitizeHtml(String(data.title || ""), {
+    allowedTags: [],
+    allowedAttributes: {},
+  }).trim();
+  const safeSummary = sanitizeHtml(String(data.summary || ""), {
+    allowedTags: [],
+    allowedAttributes: {},
+  }).trim();
+  const safeCategory = sanitizeHtml(String(data.category || ""), {
+    allowedTags: [],
+    allowedAttributes: {},
+  }).trim();
+
   const payload = {
-    title: String(data.title || "").trim(),
-    summary: String(data.summary || "").trim(),
-    content: String(data.content || "").trim(),
-    category: String(data.category || "").trim(),
+    title: safeTitle,
+    summary: safeSummary,
+    content: sanitizeHtml(String(data.content || ""), {
+      allowedTags: [
+        "p",
+        "br",
+        "b",
+        "strong",
+        "i",
+        "em",
+        "u",
+        "ul",
+        "ol",
+        "li",
+        "h2",
+        "h3",
+        "blockquote",
+        "a",
+      ],
+      allowedAttributes: {
+        a: ["href", "target", "rel"],
+      },
+      allowedSchemes: ["http", "https", "mailto"],
+      transformTags: {
+        a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }),
+      },
+    }).trim(),
+    category: safeCategory,
     date: String(data.date || "").trim(),
     imageUrl: data.imageUrl ? String(data.imageUrl) : null,
     videoUrl: data.videoUrl ? String(data.videoUrl) : null,
@@ -45,17 +81,17 @@ const normalizePayload = (data = {}) => {
 };
 
 export const getAll = () =>
-  prisma.article.findMany({
+  db.article.findMany({
     orderBy: [{ date: "desc" }, { createdAt: "desc" }],
   });
 
 export const create = (data) =>
-  prisma.article.create({
+  db.article.create({
     data: normalizePayload(data),
   });
 
 export const update = (id, data) =>
-  prisma.article
+  db.article
     .update({
       where: { id: toNumberId(id) },
       data: normalizePayload(data),
@@ -73,7 +109,7 @@ export const update = (id, data) =>
     });
 
 export const remove = (id) =>
-  prisma.article
+  db.article
     .delete({
       where: { id: toNumberId(id) },
     })

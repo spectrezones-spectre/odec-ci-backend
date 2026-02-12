@@ -1,24 +1,20 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
+import { z } from "zod";
 import { createHttpError } from "../../utils/httpError.js";
+import { validateSchema } from "../../utils/validate.js";
+import { db } from "../../config/db.js";
 
-const prisma = new PrismaClient();
+const loginSchema = z.object({
+  username: z.string().trim().min(1, "username requis"),
+  password: z.string().min(1, "password requis"),
+});
 
 export const login = async (req, res, next) => {
   try {
-    const username = String(req.body?.username || "").trim();
-    const password = String(req.body?.password || "");
+    const { username, password } = validateSchema(loginSchema, req.body || {});
 
-    if (!username || !password) {
-      throw createHttpError(
-        400,
-        "username et password sont requis",
-        "AUTH_CREDENTIALS_MISSING",
-      );
-    }
-
-    const admin = await prisma.admin.findUnique({
+    const admin = await db.admin.findUnique({
       where: { username },
     });
 
