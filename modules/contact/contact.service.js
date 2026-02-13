@@ -13,12 +13,21 @@ export const sendContactEmail = async (data) => {
   }
 
   if (!isValidEmail(String(data.email))) {
-    throw createHttpError(400, "Format d'email invalide", "CONTACT_INVALID_EMAIL", {
-      email: data.email,
-    });
+    throw createHttpError(
+      400,
+      "Format d'email invalide",
+      "CONTACT_INVALID_EMAIL",
+      {
+        email: data.email,
+      },
+    );
   }
 
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (
+    !process.env.SMTP_HOST ||
+    !process.env.SMTP_USER ||
+    !process.env.SMTP_PASS
+  ) {
     throw createHttpError(
       500,
       "Configuration SMTP incomplete: SMTP_HOST, SMTP_USER, SMTP_PASS requis",
@@ -27,10 +36,13 @@ export const sendContactEmail = async (data) => {
   }
 
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: String(process.env.SMTP_SECURE || "false") === "true",
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // ✅ CRUCIAL
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
   });
 
   try {
@@ -42,11 +54,17 @@ export const sendContactEmail = async (data) => {
       text: `Nom: ${data.name}\nEmail: ${data.email}\n\n${data.message}`,
     });
   } catch (error) {
+    console.error("========== SMTP ERROR ==========");
+    console.error(error);
+    console.error("MESSAGE:", error?.message);
+    console.error("RESPONSE:", error?.response);
+    console.error("================================");
+
     throw createHttpError(
       502,
-      "Echec d'envoi du message de contact via SMTP",
+      "Echec d'envoi du message via SMTP",
       "SMTP_SEND_FAILED",
-      { reason: error?.message || "UnknownSMTPError" },
+      { reason: error?.message },
     );
   }
 };
