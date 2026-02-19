@@ -3,19 +3,26 @@ import { z } from "zod";
 import { validateSchema } from "../../utils/validate.js";
 
 const contactSchema = z.object({
-  name: z.string().trim().min(2, "Nom trop court"),
+  lastName: z.string().trim().min(1, "Nom requis"),
+  firstName: z.string().trim().min(1, "Prénom requis"),
+  address: z.string().trim().min(1, "Adresse requise"),
+  phone: z.string().trim().min(1, "Numéro de téléphone requis"),
   email: z.string().trim().email("Email invalide"),
-  subject: z.string().trim().min(3, "Sujet trop court"),
+  subject: z.enum(
+    ["demande_acces", "faire_don", "partenariat", "autre"],
+    { errorMap: () => ({ message: "Sujet invalide" }) },
+  ),
   message: z.string().trim().min(10, "Message trop court"),
 });
 
 export const sendMail = async (req, res, next) => {
   try {
     const payload = validateSchema(contactSchema, req.body || {});
-    await sendContactEmail(payload);
+    const result = await sendContactEmail(payload);
     res.status(201).json({
       success: true,
-      message: "Message envoye avec succes",
+      message: "Message envoyé avec succès",
+      id: result.id,
     });
   } catch (error) {
     next(error);

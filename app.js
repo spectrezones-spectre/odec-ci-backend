@@ -8,6 +8,7 @@ import articleRoutes from "./modules/articles/articles.routes.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
 import contactRoutes from "./modules/contact/contact.routes.js";
+import statsRoutes from "./modules/stats/stats.routes.js";
 import { notFoundHandler } from "./middlewares/notFoundMiddleware.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 import { verifyDbConnection } from "./config/db.js";
@@ -70,6 +71,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/auth", authRoutes);
 // app.use("/api/ai", aiRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.get("/", (_req, res) => {
   res.send("ODEC-CI API ONLINE");

@@ -37,3 +37,10 @@ export const aiLimiter = createLimiter({
   code: "AI_RATE_LIMIT_EXCEEDED",
 });
 
+export const donLimiter = createLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 15,
+  error: "Trop de declarations de don. Reessayez plus tard.",
+  code: "DON_RATE_LIMIT_EXCEEDED",
+});
+
