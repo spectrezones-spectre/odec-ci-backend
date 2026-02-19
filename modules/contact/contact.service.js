@@ -27,7 +27,7 @@ function createTransporter() {
   });
 }
 
-const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@odec-ci.org";
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "test@odec-ci.org";
 const VALID_SUBJECTS = new Set([
   "demande_acces",
   "faire_don",
