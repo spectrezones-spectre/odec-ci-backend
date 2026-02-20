@@ -17,3 +17,6 @@ const generate = async (req, res, next) => {
     next(error);
   }
 };
+
+
+module.exports = { generate };

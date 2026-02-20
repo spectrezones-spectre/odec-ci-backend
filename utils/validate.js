@@ -16,3 +16,6 @@ const validateSchema = (schema, input) => {
     throw error;
   }
 };
+
+
+module.exports = { validateSchema };

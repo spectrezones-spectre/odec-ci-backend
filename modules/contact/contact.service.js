@@ -126,3 +126,6 @@ const sendContactEmail = async (data) => {
 
   return { id: contactRecord.id, success: true };
 };
+
+
+module.exports = { isValidEmail, sendContactEmail };

@@ -5,3 +5,6 @@ const db = new PrismaClient();
 const verifyDbConnection = async () => {
   await db.$queryRaw`SELECT 1`;
 };
+
+
+module.exports = { verifyDbConnection };

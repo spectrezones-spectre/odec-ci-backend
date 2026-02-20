@@ -1,10 +1,11 @@
 const { Router } = require("express");
-import {
+const {
   createArticle,
   deleteArticle,
   getArticles,
   updateArticle,
-} from "./articles.controller.js";
+} = require("./articles.controller.js");
+
 const { protect } = require("../../middlewares/authMiddleware.js");
 
 const router = Router();

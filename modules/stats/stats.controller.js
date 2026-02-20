@@ -20,3 +20,6 @@ const getStats = async (_req, res, next) => {
     next(error);
   }
 };
+
+
+module.exports = { getStats };

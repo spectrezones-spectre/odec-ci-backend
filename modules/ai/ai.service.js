@@ -44,3 +44,6 @@ const generateContent = async ({ prompt, task }) => {
   }
   return text;
 };
+
+
+module.exports = { getModel, generateContent };

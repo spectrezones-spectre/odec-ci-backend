@@ -9,3 +9,6 @@ const notFoundHandler = (req, _res, next) => {
     ),
   );
 };
+
+
+module.exports = { notFoundHandler };

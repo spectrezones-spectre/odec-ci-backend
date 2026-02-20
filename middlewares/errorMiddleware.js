@@ -36,3 +36,6 @@ const errorHandler = (err, req, res, _next) => {
     timestamp: new Date().toISOString(),
   });
 };
+
+
+module.exports = { errorHandler };

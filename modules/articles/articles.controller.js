@@ -1,4 +1,5 @@
-const * as s = require('./articles.service.js');
+// const * as s = require('./articles.service.js');
+const s = require('./articles.service.js');
 
 const getArticles = async (_req, res, next) => {
   try {
@@ -34,3 +35,6 @@ const deleteArticle = async (req, res, next) => {
     next(error);
   }
 };
+
+
+module.exports = { getArticles, createArticle, updateArticle, deleteArticle };

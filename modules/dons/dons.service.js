@@ -38,3 +38,6 @@ const createDon = async (data) => {
 
   return { id: don.id, success: true };
 };
+
+
+module.exports = { createDon };

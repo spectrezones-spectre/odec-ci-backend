@@ -41,3 +41,6 @@ const protect = (req, _res, next) => {
     );
   }
 };
+
+
+module.exports = { protect };

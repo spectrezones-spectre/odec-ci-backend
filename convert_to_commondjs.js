@@ -1,57 +1,50 @@
 const fs = require("fs");
 const path = require("path");
 
+const ROOT_DIR = __dirname;
+
 function processFile(filePath) {
   let content = fs.readFileSync(filePath, "utf8");
 
-  if (!content.includes("export")) return;
+  // Ignore si déjà exporté
+  if (content.includes("module.exports")) return;
 
-  const exportedNames = [];
+  // Cherche toutes les fonctions const
+  const functionRegex = /const (\w+) = async|\bconst (\w+) = \(/g;
+  let match;
+  const exports = [];
 
-  // export const
-  content = content.replace(/export const (\w+)/g, (_, name) => {
-    exportedNames.push(name);
-    return `const ${name}`;
-  });
-
-  // export async function
-  content = content.replace(/export async function (\w+)/g, (_, name) => {
-    exportedNames.push(name);
-    return `async function ${name}`;
-  });
-
-  // export function
-  content = content.replace(/export function (\w+)/g, (_, name) => {
-    exportedNames.push(name);
-    return `function ${name}`;
-  });
-
-  // export default
-  content = content.replace(/export default (\w+)/g, (_, name) => {
-    exportedNames.push(name);
-    return `${name}`;
-  });
-
-  if (exportedNames.length > 0) {
-    content += `\n\nmodule.exports = { ${exportedNames.join(", ")} };`;
+  while ((match = functionRegex.exec(content)) !== null) {
+    const name = match[1] || match[2];
+    if (name) exports.push(name);
   }
 
-  fs.writeFileSync(filePath, content);
+  if (exports.length === 0) return;
+
+  console.log("Ajout exports:", filePath);
+
+  content += `\n\nmodule.exports = { ${exports.join(", ")} };\n`;
+
+  fs.writeFileSync(filePath, content, "utf8");
 }
 
-function scanDir(dir) {
-  fs.readdirSync(dir).forEach(file => {
+function walkDir(dir) {
+  const files = fs.readdirSync(dir);
+
+  for (const file of files) {
     const fullPath = path.join(dir, file);
-    if (fs.statSync(fullPath).isDirectory()) {
-      scanDir(fullPath);
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      if (file !== "node_modules") {
+        walkDir(fullPath);
+      }
     } else if (file.endsWith(".js")) {
       processFile(fullPath);
     }
-  });
+  }
 }
 
-scanDir("./modules");
-scanDir("./middlewares");
-scanDir("./config");
+walkDir(ROOT_DIR);
 
-console.log("Conversion terminée 🚀");
+console.log("🚀 Export ajouté automatiquement !");

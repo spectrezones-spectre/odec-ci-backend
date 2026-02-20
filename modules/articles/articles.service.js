@@ -128,3 +128,6 @@ const remove = (id) =>
       }
       throw error;
     });
+
+
+module.exports = { toNumberId, normalizePayload, getAll, create, update, remove };

@@ -43,3 +43,13 @@ const donLimiter = createLimiter({
   error: "Trop de declarations de don. Reessayez plus tard.",
   code: "DON_RATE_LIMIT_EXCEEDED",
 });
+
+
+module.exports = { 
+  createLimiter,
+  authLimiter,
+  contactLimiter,
+  aiLimiter,
+  donLimiter 
+
+};

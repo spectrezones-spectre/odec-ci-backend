@@ -7,3 +7,6 @@ const createHttpError = (status, message, code = "API_ERROR", details) => {
   }
   return error;
 };
+
+
+module.exports = { createHttpError };
