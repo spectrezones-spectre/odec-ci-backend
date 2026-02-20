@@ -1,7 +1,7 @@
-import { ZodError } from "zod";
-import { createHttpError } from "./httpError.js";
+const { ZodError } = require("zod");
+const { createHttpError } = require("./httpError.js");
 
-export const validateSchema = (schema, input) => {
+const validateSchema = (schema, input) => {
   try {
     return schema.parse(input);
   } catch (error) {
@@ -16,4 +16,3 @@ export const validateSchema = (schema, input) => {
     throw error;
   }
 };
-

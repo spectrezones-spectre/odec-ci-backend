@@ -1,11 +1,11 @@
-import { Router } from "express";
+const { Router } = require("express");
 import {
   createArticle,
   deleteArticle,
   getArticles,
   updateArticle,
 } from "./articles.controller.js";
-import { protect } from "../../middlewares/authMiddleware.js";
+const { protect } = require("../../middlewares/authMiddleware.js");
 
 const router = Router();
 
@@ -14,4 +14,4 @@ router.post("/", protect, createArticle);
 router.put("/:id", protect, updateArticle);
 router.delete("/:id", protect, deleteArticle);
 
-export default router;
+module.exports = router;

@@ -1,6 +1,6 @@
-import { createHttpError } from "../utils/httpError.js";
+const { createHttpError } = require("../utils/httpError.js");
 
-export const notFoundHandler = (req, _res, next) => {
+const notFoundHandler = (req, _res, next) => {
   next(
     createHttpError(
       404,
@@ -9,4 +9,3 @@ export const notFoundHandler = (req, _res, next) => {
     ),
   );
 };
-

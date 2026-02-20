@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { getStats } from "./stats.controller.js";
-import { protect } from "../../middlewares/authMiddleware.js";
+const { Router } = require("express");
+const { getStats } = require("./stats.controller.js");
+const { protect } = require("../../middlewares/authMiddleware.js");
 
 const r = Router();
 r.get("/", protect, getStats);
-export default r;
+module.exports = r;

@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
-import { createHttpError } from "../../utils/httpError.js";
-import { db } from "../../config/db.js";
+const nodemailer = require("nodemailer");
+const { createHttpError } = require("../../utils/httpError.js");
+const { db } = require("../../config/db.js");
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -35,16 +35,8 @@ const VALID_SUBJECTS = new Set([
   "autre",
 ]);
 
-export const sendContactEmail = async (data) => {
-  const {
-    lastName,
-    firstName,
-    address,
-    phone,
-    email,
-    subject,
-    message,
-  } = data;
+const sendContactEmail = async (data) => {
+  const { lastName, firstName, address, phone, email, subject, message } = data;
 
   if (
     !lastName?.trim() ||
@@ -72,12 +64,9 @@ export const sendContactEmail = async (data) => {
   }
 
   if (!VALID_SUBJECTS.has(subject)) {
-    throw createHttpError(
-      400,
-      "Sujet invalide",
-      "CONTACT_INVALID_SUBJECT",
-      { subject },
-    );
+    throw createHttpError(400, "Sujet invalide", "CONTACT_INVALID_SUBJECT", {
+      subject,
+    });
   }
 
   // Sauvegarde en base (protection XSS : champs stockés tels quels, échappés à l'affichage)

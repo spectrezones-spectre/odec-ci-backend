@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { sendMail } from "./contact.controller.js";
-import { contactLimiter } from "../../middlewares/routeLimiters.js";
+const { Router } = require("express");
+const { sendMail } = require("./contact.controller.js");
+const { contactLimiter } = require("../../middlewares/routeLimiters.js");
 
 const r = Router();
 r.post("/", contactLimiter, sendMail);
-export default r;
+module.exports = r;

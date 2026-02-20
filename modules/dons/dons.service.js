@@ -1,15 +1,19 @@
-import { db } from "../../config/db.js";
-import { createHttpError } from "../../utils/httpError.js";
+const { db } = require("../../config/db.js");
+const { createHttpError } = require("../../utils/httpError.js");
 
 /**
  * Enregistre une déclaration de don (pour suivi et statistiques dashboard).
  * Le donateur effectue le virement Mobile Money séparément.
  */
-export const createDon = async (data) => {
+const createDon = async (data) => {
   const { amount, currency, donorName, phone, note } = data;
 
   if (amount == null || Number(amount) <= 0) {
-    throw createHttpError(400, "Le montant doit être strictement positif.", "DON_INVALID_AMOUNT");
+    throw createHttpError(
+      400,
+      "Le montant doit être strictement positif.",
+      "DON_INVALID_AMOUNT",
+    );
   }
 
   const amountNum = Number(amount);
@@ -17,7 +21,10 @@ export const createDon = async (data) => {
     throw createHttpError(400, "Montant invalide.", "DON_INVALID_AMOUNT");
   }
 
-  const noteText = [phone ? `Tél: ${String(phone).trim()}` : null, note?.trim()].filter(Boolean).join("\n") || null;
+  const noteText =
+    [phone ? `Tél: ${String(phone).trim()}` : null, note?.trim()]
+      .filter(Boolean)
+      .join("\n") || null;
 
   const don = await db.don.create({
     data: {

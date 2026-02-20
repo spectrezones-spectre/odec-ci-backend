@@ -1,4 +1,4 @@
-export const createHttpError = (status, message, code = "API_ERROR", details) => {
+const createHttpError = (status, message, code = "API_ERROR", details) => {
   const error = new Error(message);
   error.status = status;
   error.code = code;
@@ -7,4 +7,3 @@ export const createHttpError = (status, message, code = "API_ERROR", details) =>
   }
   return error;
 };
-

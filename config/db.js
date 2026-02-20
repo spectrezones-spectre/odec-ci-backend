@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
-export const db = new PrismaClient();
+const db = new PrismaClient();
 
-export const verifyDbConnection = async () => {
+const verifyDbConnection = async () => {
   await db.$queryRaw`SELECT 1`;
 };
-

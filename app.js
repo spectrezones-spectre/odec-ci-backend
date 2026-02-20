@@ -1,17 +1,17 @@
-import "./config/environment.js";
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
-import globalLimiter from "./middlewares/global.middleware.js";
-import articleRoutes from "./modules/articles/articles.routes.js";
-import authRoutes from "./modules/auth/auth.routes.js";
-import aiRoutes from "./modules/ai/ai.routes.js";
-import contactRoutes from "./modules/contact/contact.routes.js";
-import statsRoutes from "./modules/stats/stats.routes.js";
-import { notFoundHandler } from "./middlewares/notFoundMiddleware.js";
-import { errorHandler } from "./middlewares/errorMiddleware.js";
-import { verifyDbConnection } from "./config/db.js";
+require("./config/environment.js");
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const globalLimiter = require("./middlewares/global.middleware.js");
+const articleRoutes = require("./modules/articles/articles.routes.js");
+const authRoutes = require("./modules/auth/auth.routes.js");
+const aiRoutes = require("./modules/ai/ai.routes.js");
+const contactRoutes = require("./modules/contact/contact.routes.js");
+const statsRoutes = require("./modules/stats/stats.routes.js");
+const { notFoundHandler } = require("./middlewares/notFoundMiddleware.js");
+const { errorHandler } = require("./middlewares/errorMiddleware.js");
+const { verifyDbConnection } = require("./config/db.js");
 
 const app = express();
 app.set("trust proxy", 1);
@@ -20,7 +20,9 @@ const isProd = process.env.NODE_ENV === "production";
 app.use(morgan(isProd ? "combined" : "dev"));
 
 const normalizeOrigin = (origin) =>
-  String(origin || "").trim().replace(/\/+$/, "");
+  String(origin || "")
+    .trim()
+    .replace(/\/+$/, "");
 
 const envCorsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map(normalizeOrigin).filter(Boolean)
@@ -58,7 +60,7 @@ app.use(
     referrerPolicy: { policy: "no-referrer" },
     xContentTypeOptions: true,
     xDnsPrefetchControl: { allow: false },
-  })
+  }),
 );
 
 app.use(globalLimiter);
@@ -90,4 +92,4 @@ app.use(errorHandler);
   }
 })();
 
-export default app;
+module.exports = app;

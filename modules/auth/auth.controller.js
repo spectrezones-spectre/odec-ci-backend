@@ -1,16 +1,16 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { z } from "zod";
-import { createHttpError } from "../../utils/httpError.js";
-import { validateSchema } from "../../utils/validate.js";
-import { db } from "../../config/db.js";
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { z } = require("zod");
+const { createHttpError } = require("../../utils/httpError.js");
+const { validateSchema } = require("../../utils/validate.js");
+const { db } = require("../../config/db.js");
 
 const loginSchema = z.object({
   username: z.string().trim().min(1, "username requis"),
   password: z.string().min(1, "password requis"),
 });
 
-export const login = async (req, res, next) => {
+const login = async (req, res, next) => {
   try {
     const { username, password } = validateSchema(loginSchema, req.body || {});
 
@@ -19,7 +19,11 @@ export const login = async (req, res, next) => {
     });
 
     if (!admin || !bcrypt.compareSync(password, admin.password)) {
-      throw createHttpError(401, "Identifiants invalides", "AUTH_INVALID_CREDENTIALS");
+      throw createHttpError(
+        401,
+        "Identifiants invalides",
+        "AUTH_INVALID_CREDENTIALS",
+      );
     }
 
     if (!process.env.JWT_SECRET) {
@@ -30,9 +34,13 @@ export const login = async (req, res, next) => {
       );
     }
 
-    const token = jwt.sign({ id: admin.id, admin: true }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: admin.id, admin: true },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      },
+    );
 
     res.json({ token });
   } catch (error) {

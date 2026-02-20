@@ -1,5 +1,5 @@
-import "./config/environment.js";
-import app from "./app.js";
+require("./config/environment.js");
+const app = require("./app.js");
 
 const PORT = Number(process.env.PORT || 5000);
 app.listen(PORT, () => {

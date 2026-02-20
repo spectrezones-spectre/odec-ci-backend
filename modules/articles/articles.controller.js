@@ -1,6 +1,6 @@
-import * as s from "./articles.service.js";
+const * as s = require('./articles.service.js');
 
-export const getArticles = async (_req, res, next) => {
+const getArticles = async (_req, res, next) => {
   try {
     res.json(await s.getAll());
   } catch (error) {
@@ -8,7 +8,7 @@ export const getArticles = async (_req, res, next) => {
   }
 };
 
-export const createArticle = async (req, res, next) => {
+const createArticle = async (req, res, next) => {
   try {
     const created = await s.create(req.body);
     res.status(201).json(created);
@@ -17,7 +17,7 @@ export const createArticle = async (req, res, next) => {
   }
 };
 
-export const updateArticle = async (req, res, next) => {
+const updateArticle = async (req, res, next) => {
   try {
     const updated = await s.update(req.params.id, req.body);
     res.json(updated);
@@ -26,7 +26,7 @@ export const updateArticle = async (req, res, next) => {
   }
 };
 
-export const deleteArticle = async (req, res, next) => {
+const deleteArticle = async (req, res, next) => {
   try {
     await s.remove(req.params.id);
     res.status(204).send();

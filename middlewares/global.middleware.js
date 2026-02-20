@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+const rateLimit = require("express-rate-limit");
 
 const windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000);
 const max = Number(process.env.RATE_LIMIT_MAX_REQUESTS || 300);
@@ -22,4 +22,4 @@ const globalLimiter = rateLimit({
   },
 });
 
-export default globalLimiter;
+module.exports = globalLimiter;

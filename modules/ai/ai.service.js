@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { createHttpError } from "../../utils/httpError.js";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { createHttpError } = require("../../utils/httpError.js");
 
 const getModel = () => {
   if (!process.env.GEMINI_API_KEY) {
@@ -16,7 +16,7 @@ const getModel = () => {
   });
 };
 
-export const generateContent = async ({ prompt, task }) => {
+const generateContent = async ({ prompt, task }) => {
   const model = getModel();
   const fullPrompt = [
     "Vous êtes un assistant de communication pour ODEC-CI.",

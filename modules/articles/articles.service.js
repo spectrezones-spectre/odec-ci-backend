@@ -1,6 +1,6 @@
-import sanitizeHtml from "sanitize-html";
-import { createHttpError } from "../../utils/httpError.js";
-import { db } from "../../config/db.js";
+const sanitizeHtml = require("sanitize-html");
+const { createHttpError } = require("../../utils/httpError.js");
+const { db } = require("../../config/db.js");
 
 const toNumberId = (id) => {
   const articleId = Number(id);
@@ -64,9 +64,13 @@ const normalizePayload = (data = {}) => {
     pdfUrl: data.pdfUrl ? String(data.pdfUrl) : null,
   };
 
-  const missingFields = ["title", "summary", "content", "category", "date"].filter(
-    (field) => !payload[field],
-  );
+  const missingFields = [
+    "title",
+    "summary",
+    "content",
+    "category",
+    "date",
+  ].filter((field) => !payload[field]);
 
   if (missingFields.length > 0) {
     throw createHttpError(
@@ -80,17 +84,17 @@ const normalizePayload = (data = {}) => {
   return payload;
 };
 
-export const getAll = () =>
+const getAll = () =>
   db.article.findMany({
     orderBy: [{ date: "desc" }, { createdAt: "desc" }],
   });
 
-export const create = (data) =>
+const create = (data) =>
   db.article.create({
     data: normalizePayload(data),
   });
 
-export const update = (id, data) =>
+const update = (id, data) =>
   db.article
     .update({
       where: { id: toNumberId(id) },
@@ -108,7 +112,7 @@ export const update = (id, data) =>
       throw error;
     });
 
-export const remove = (id) =>
+const remove = (id) =>
   db.article
     .delete({
       where: { id: toNumberId(id) },

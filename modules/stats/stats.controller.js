@@ -1,7 +1,7 @@
-import { db } from "../../config/db.js";
-import { createHttpError } from "../../utils/httpError.js";
+const { db } = require("../../config/db.js");
+const { createHttpError } = require("../../utils/httpError.js");
 
-export const getStats = async (_req, res, next) => {
+const getStats = async (_req, res, next) => {
   try {
     const [totalForms, totalDonsResult, totalInscrits] = await Promise.all([
       db.contactMessage.count(),

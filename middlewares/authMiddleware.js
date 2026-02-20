@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import { createHttpError } from "../utils/httpError.js";
+const jwt = require("jsonwebtoken");
+const { createHttpError } = require("../utils/httpError.js");
 
-export const protect = (req, _res, next) => {
+const protect = (req, _res, next) => {
   const authHeader = req.headers.authorization || "";
   const [scheme, token] = authHeader.split(" ");
 

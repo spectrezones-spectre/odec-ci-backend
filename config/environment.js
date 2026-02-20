@@ -1,3 +1,3 @@
-import dotenv from 'dotenv';
+const dotenv = require("dotenv");
 dotenv.config();
-export const config = process.env;
+const config = process.env;
